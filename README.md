@@ -1,135 +1,84 @@
 
-# Git Stash - Lab
+# Git and Github - Lab
 
 ## Introduction
 
-You've started to see some of the awesome power of git as a tool for version control and collaboration. Sometimes, workflows aren't quite as linear or straightforward as those examples we've discussed thus far. For example, if both the local and remote versions of a repository have been updated at the same time, you may encounter merge conflicts! Essentially, Git is unsure of which changes to incorporate if both versions of the repository have changed the same line of the same file. In these cases, `git stash` can be a valuable tool: it allows you to *stash* away your changes for later use!
+So far we've seen how Git can be an incredibly useful tool for keeping track of changes, allowing you to test features or branches, and then go back to earlier versions if you'd like. But that is only one use for Git, it can also be a very helpful tool when collaborating with other data scientists. Hopefully by now you have been set up with **Github** which is a website that hosts Git repos in the clould. This lab will have you practicing creating repos in Github, cloning repos from Github, pushing changes to Github, and finally, how to deal with Git conflicts that might arise not just from your own coding, but from the collaboration process itself. Additionally, we'll test the functionality of .gitignore. All of these skill will be important as you move through the projects here at Flatiron.  
                                        
 
 ## Objectives
 
 You will be able to:
 
-- Use `git stash` to store changes to files  
-- Identify and fix merge conflicts when merging branches 
+- Create a repo through the Github interface
+- Use .gitignore to prevent a file from being uploaded to the cloud
+- Push specific branches to Github
+- Create new Jupyter Notebooks with which to work in
+- Invite collaborators to your Github repo
+- Identify and fix merge conflicts when merging branches on the Github platform
 
-## Getting started
+## Creating a Repo
 
+First, we'll want to practice creating a new repo in Github. You can also do this from your terminal, but doing it from the Github site lets you set some handy defaults as we go.  
 
-Since we're doing another Git investigation, let's start by working from our previously created `git` repository from _Git Merge - Lab_. 
+From the homepage, you should see in the upper left a green button that says "New"
 
+(Alterntively, in the upper right you can click the plus sign that will show you a drop down with several options, including 'New Repository')
 
-- Check `git status` 
+<new repo image>
 
-Hopefully, you should see the usual:  
+From there, you'll see this screen:
 
-```
-On branch master
-nothing to commit, working tree clean
-```
+<new repo menu image>
 
-If not, add and commit your changes and recheck `git status`. 
+There are many options here. We'll go through them in order.
 
+ 1. For now, ignore the template option. Some organizations might create ready made templates for you to use, but we're just working with the basic repo.
+ 
+ 2. If you see an option to select an owner, go ahead and select yourself. Again, if your Github profile is linked to a larger organization (like, say, if you were an instructor at Flatiron School) you might have the option to set that organization as the owner of the repo. But we'll keep this one personal.
+ 
+ 3. Now we can name the repo. Choose something descriptive, but unique. Also, in general, we want to avoid putting spaces in titles for files and folders. I went with dsc-github-practice-repo here, just as an example. You can also add a description if you'd like. I put "This repo is for practicing git commands and using cloud repos," but you can put in anything you'd like. 
+ 
+ 4. Since we want to practice collaborating, let's set this repo to public. This means that anyone with the link could theoretically take a peek at the repo. Keep this in mind, we don't want to upload any personal or sensitive information to this repo. 
+ 
+ 5. Next, check the box to add a README. Github is offering to create a README file for us, since every good repo should have a README. It'll be a blank document at first, but ticking this box saves us the step of creating that README manually.
+ 
+ 6. Finally, we're given the option to choose a .gitignore template. If we don't select anything here, we'll have to create the .gitignore manually. Since we mostly use Python in our bootcamp, let's select the Python .gitignore, which will automatically populate the file with many useful defaults. We can always edit the .gitignore later to suit our needs. 
+ 
+ 7. Ignore the license for now.
 
-## Make some changes
+All of these options can be adjusted later, but this sets us up well for a good collaborative repo.
 
-Now that we have a clean working directory, let's muck things up! (Sorry if you already had untracked changes and cleaned them up; it's good practice at the very least!)
+Once you're all set **go ahead and create the repo.** It should look like this:
 
-Once again, let's modify `numbers.py`. Open up the file from the command line with `nano numbers.py` and modify the script so that it prints the fourth power of numbers. The script should look like this:
+<repo created image>
 
-```python
-for i in range(10):
-    print(i**4)    
-```
+If you've been following these steps, the README file and the .gitignore will have been already added to the repo. 
 
-- Check `git status` again 
+## Clone to local
 
+Now that you've got your very own repo in Github, we need to get this down to our local computer to work on it. You can copy and paste the url at the top or click the green "Code" button to get the url. Then, we'll want to open up our terminal, and navigate to an appropriate folder. Hopefully you have a folder for your Flatiron materials already created, and you've probably cloned at least a few labs into it already. This might be the first time you clone your own repo into your computer though! Very exciting. Make sure you're not cloning this repo into another repo though! That can sometimes cause conflicts later down the line.
 
-This time, you should see something like:
+Once you've navigated to the right folder, we'll use the command 
 
-```
-On branch master
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
+> git clone <your-url-here>
 
-	modified:   numbers.py
+This should create a folder in your local machine that is a copy of the repo in the cloud. 
 
-no changes added to commit (use "git add" and/or "git commit -a")
-```
+## Creating a main notebook
 
+Now that we've cloned down this repo, let's cd into it, and hit ls to look around. You should see the README file, and nothing else. The .gitignore is hidden by default. See the .gitignore module for more on how to intract with it, but for now let's just... ignore it. 
 
-## Try out `git stash` 
+We want to create a jupyter notebook in here as if we were about to start a project! Go ahead and type 
 
+> jupyter notebook
 
-Now for our new wizardry! Execute the command `git stash`. Afterward, do another `git status` to see what's going on.
-
+into your terminal. This will open up a new tab with a local host of your folder. In the upper right, you'll see a drop down under "New". Click that, and select the Python (learn-env) option. You'll be taken to a blank, unnamed notebook.
 
 ### Further exploration 
-
-You should see that we're back to a clean working tree. You can further see this by using the bash command `cat` which will print the contents of a file to the command line, so in this case, try out `cat numbers.py`. You should see that our file has reverted back to the previous version where we were actually cubing our numbers.
-
-So what happened to our changes? Where did they go? We stashed them. To see stashes, you can use the command `git stash list`. Try it out now. 
-
-If you want a few more details about the stash, you can use `git stash show`. Again, give it a try.
-
-Finally, if you want to re-implement your stashed changes you can use `git stash apply`. Let's go ahead and reapply our changes (raising numbers to the fourth power rather than the third). 
-
-Once you do that, you'll see a message as if we did `git status`, and you'll see that we once again have changes that have not been added or committed. What's more, while we've applied our stash, the stash still exists (you can see this once again with `git stash list`).
-
-## See all of the commit history
-
-As a friendly reminder, you can see all of the commit history to date with `git log --graph`.
-
-## Create a new branch
-
-Next, we're going to briefly investigate some merge conflicts. These occur when you have two versions of the same file which both have the same line modified. This typically occurs when merging branches as we cleanly did in the last lab. Here, we'll cause the same behavior to occur by modifying our new branch and then attempting to apply our stashed changes.
-
-- Create a new branch called `beta` 
-- On your new branch, modify `numbers.py` to raise numbers to the 5th power 
-- Once you modify the script, take a look at the state of affairs with `git status`. Then add and commit your changes with an appropriate description 
-
-
-## Merge Conflicts
-
-Now for the fun part. We're going to create a merge conflict. Execute `git stash apply`.
-
-You should be presented with a message:
-
-```
-Auto-merging numbers.py
-CONFLICT (content): Merge conflict in numbers.py
-```
-
-What's more, if you open up `numbers.py` with `nano numbers.py`, you'll see some bizarre changes:
-
-<img src="images/stash_merge_conflict.png" width=750>
-
-So what do all of these symbols mean?
-
-* `<<<<<<< Updated Upstream` - the beginning of the original branch (beta)
-* `=======` - the end of the original branch/the beginning of the branch being merged in (our stashed changes)
-* `>>>>>>> Stashed changes` - the end of our stashed changes
-
-This is because our new branch and the stashed changes modified the same line of the same file. Specifically, both modified line 2 of the `numbers.py` file. As such, Git is unsure of which version of line 2 we wish to incorporate. It has highlighted this for us, and it’s now our job to manually modify the file to resolve these conflicts, keeping the version we are interested in.
-
-As a further note, this is why development would generally be separated by files, or at the very least, sections of files; we can avoid merge conflicts and continue to collaborate together working seamlessly on a project. 
-
-Your `numbers.py` file should now be back to numbers raised the 4th degree as such:
-
-```python
-for i in range(10):
-    print(i**4)
-```
-
-(To do this, we simply manually opened up the file with nano and resolved the merge conflicts, including removing the notes left for us by Git.)
-
-Checking `git status`, we now see that we have once again modified `numbers.py`. As usual, we can now add and commit those changes to our version history. 
+ 
 
 ## Additional Resources
 
-[Git Stash Documentation](https://www.git-scm.com/docs/git-stash)
 
 ## Summary
-
-In this lesson, we took a look at `git stash` as well as merge conflicts, and how to resolve them. `git stash` is often useful when you need to quickly store away your changes and don't wish to create a new branch; you intend to quickly reintroduce these changes but need to put them to the side for a moment. This can be helpful if the remote repository has been updated and you first need to fetch and pull it, but have already also made some changes locally. In this and other cases, it's often easiest to first just stash the changes and then apply them subsequently. Similarly, we also saw that stashed changes can be applied to multiple branches. Overall, the more you use Git and its myriad of tools, the more options you'll have for organizing and synchronizing your development process.
